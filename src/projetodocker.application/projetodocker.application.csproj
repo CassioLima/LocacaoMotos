@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Command\TarefaAdicionarComentarioComand.cs" />
+    <Compile Remove="Query\ProjetoQuery.cs" />
+    <Compile Remove="Query\ProjetoQueryHandler.cs" />
+    <Compile Remove="Query\ProjetoUsuarioQuery.cs" />
+    <Compile Remove="Query\TarefaProjetoQuery.cs" />
+    <Compile Remove="Query\TarefaRelatorioQuery.cs" />
+    <Compile Remove="Query\UsuarioQuery.cs" />
+    <Compile Remove="Query\UsuarioQueryHandler.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Flunt" Version="2.0.5" />
+    <PackageReference Include="MassTransit" Version="8.3.0" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\projetodocker.domain\projetodocker.domain.csproj" />
+    <ProjectReference Include="..\projetodocker.images\projetodocker.images.csproj" />
+    <ProjectReference Include="..\projetodocker.infra\projetodocker.infra.csproj" />
+    <ProjectReference Include="..\projetodocker.shared\projetodocker.shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Query\Plano\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\projetodocker.application\projetodocker.application.csproj" />
+    <ProjectReference Include="..\projetodocker.domain\projetodocker.domain.csproj" />
+    <ProjectReference Include="..\projetodocker.infra\projetodocker.infra.csproj" />
+    <ProjectReference Include="..\projetodocker.shared\projetodocker.shared.csproj" />
+  </ItemGroup>
+
+</Project>

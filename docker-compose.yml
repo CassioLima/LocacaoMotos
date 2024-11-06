@@ -1,0 +1,109 @@
+services:
+
+  rabbitmq:
+    container_name: rabbitmq
+    ports:
+        - 5672:5672
+        - 15672:15672
+    environment:
+        - RABBITMQ_DEFAULT_USER=guest
+        - RABBITMQ_DEFAULT_PASS=guest        
+    image: rabbitmq:3-management
+    hostname: "rabbitmq"
+    networks:
+      - aspnetcoreapp-network
+
+  postgres:
+    container_name: 'postgres'
+    image: postgres:15
+    ports:
+      - 5432:5432
+    volumes: 
+       - postgre_docker_vol:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dockerdb
+    networks:
+      - aspnetcoreapp-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - aspnetcoreapp-network
+
+  projetodocker.api:
+    image: projetodocker.api
+    build:
+      context: .
+      dockerfile: src/projetodocker.api/Dockerfile
+    depends_on:
+     - "postgres"
+     - "rabbitmq"
+     - "elasticsearch"
+    networks:
+      - aspnetcoreapp-network
+
+  projetodocker.consumer:
+    image: projetodocker.consumer
+    build:
+      context: .
+      dockerfile: src/projetodocker.consumer/Dockerfile
+    depends_on:
+     - "postgres"
+     - "rabbitmq"
+     - "elasticsearch"
+     - "projetodocker.api" 
+    networks:
+      - aspnetcoreapp-network
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.22
+    environment:
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    volumes:
+      - v01:/usr/share/elasticsearch/data
+    networks:
+      - aspnetcoreapp-network
+    healthcheck: 
+      test: ["CMD", "curl", "-f", "http://localhost:9200"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.11.0
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    ports:
+      - 5601:5601
+    networks:
+      - aspnetcoreapp-network
+
+networks:
+  aspnetcoreapp-network:
+    driver: bridge
+
+volumes: 
+  postgre_docker_vol:
+  v01:
+    driver: local
+  

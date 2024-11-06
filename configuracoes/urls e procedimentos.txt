@@ -1,0 +1,22 @@
+
+
+PgAdmin
+http://localhost:5050/browser/
+
+Swagger
+http://localhost:8082/swagger/index.html
+
+RabbitMQ
+http://localhost:15672/
+
+Kibana
+http://localhost:5601/
+
+
+
+
+
+dotnet tool install --global dotnet-ef --version 8.0.10
+dotnet-ef migrations add cargaInicial --project src/projetodocker.infra/ --startup-project src/projetodocker.api/
+dotnet-ef database update --project src/projetodocker.infra/ --startup-project src/projetodocker.api/
+
